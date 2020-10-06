@@ -1,93 +1,103 @@
 #include"DList.h"
 
 #include<iostream>
-#include <fstream>
 
 using std::cout;
 using std::string;
 using std::ifstream;
 using std::ofstream;
 
-Node::Node(int _value, Node *_prev = nullptr, Node *_next = nullptr) : value(_value), prev(_prev), next(_next) {}
-
-Node::~Node() {
+template<class Type>
+Node<Type>::Node(Type _info, Node<Type> *_prev, Node<Type> *_next) : info(_info), prev(_prev), next(_next) {}
+template<class Type>
+Node<Type>::~Node() {
     delete next;
 }
 
-Node *Node::get_next() {
+template<class Type>
+Node<Type> *Node<Type>::get_next() {
     return next;
 }
 
-Node *Node::get_prev() {
+template<class Type>
+Node<Type> *Node<Type>::get_prev() {
     return prev;
 }
 
-int Node::get_value() {
-    return value;
+template<class Type>
+Type Node<Type>::get_info() {
+    return info;
 }
 
-DList::~DList() {
+template<class Type>
+DList<Type>::~DList() {
     delete node;
 }
 
-Node *DList::get_node() {
+template<class Type>
+Node<Type> *DList<Type>::get_node() {
     return node;
 }
 
-bool DList::is_empty() {
+template<class Type>
+bool DList<Type>::is_empty() {
     return node == nullptr;
 }
 
-void DList::add_to_head(int value) {
-    node = new Node(value, nullptr, node);
+template<class Type>
+void DList<Type>::add_to_head(Type info) {
+    node = new Node<Type>(info, nullptr, node);
 
-    if(node->next) {
+    if (node->next) {
         node->next->prev = node;
     }
 }
 
-void DList::add_to_tail(int value) {
+template<class Type>
+void DList<Type>::add_to_tail(Type info) {
     if (!is_empty()) {
-        Node *current = node;
+        Node <Type>*current = node;
 
         while (current->next != nullptr) {
             current = current->next;
         }
 
-        current->next = new Node(value, current);
+        current->next = new Node<Type>(info, current);
         current->next->prev = current;
     } else {
-        add_to_head(value);
+        add_to_head(info);
     }
 }
 
-void DList::add_after(Node *&after, int value) {
+template<class Type>
+void DList<Type>::add_after(Node <Type>*&after, Type info) {
     if (after == nullptr) {
         return;
     }
 
     if (!is_empty()) {
-        Node *current = node;
+        Node<Type> *current = node;
 
         while (current->next != nullptr) {
             current = current->next;
         }
 
-        current->next = new Node(value, current, current->next);
+        current->next = new Node<Type>(info, current, current->next);
 
-        if(current->next->next) {
+        if (current->next->next) {
             current->next->next->prev = current->next;
         }
     }
 }
 
-void DList::remove(Node *&del_el) {
+template<class Type>
+void DList<Type>::remove(Node<Type> *&del_el) {
     if (del_el == nullptr) {
         return;
     }
 
     if (node == del_el) {
-        Node *temp = del_el->next;
+        Node <Type>*temp = del_el->next;
 
         if (temp == nullptr) {
             delete node;
@@ -99,32 +109,33 @@ void DList::remove(Node *&del_el) {
             node->prev = nullptr;
         }
     } else {
-        Node *current = node;
+        Node <Type>*current = node;
 
         while (current && current->next != del_el) {
             current = current->next;
         }
 
         if (current != nullptr) {
-            Node *temp = del_el->next;
+            Node <Type>*temp = del_el->next;
 
             del_el->next = nullptr;
             del_el->prev = nullptr;
             delete del_el;
 
             current->next = temp;
-            if(temp) {
+            if (temp) {
                 temp->prev = current;
             }
         }
     }
 }
 
-void DList::print() {
-    Node *current = node;
+template<class Type>
+void DList<Type>::print() {
+    Node<Type> *current = node;
 
     while (current != nullptr) {
-        cout << current->value << " ";
+        cout << current->info << " ";
         current = current->next;
     }
 

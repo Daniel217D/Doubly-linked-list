@@ -4,18 +4,19 @@
 
 using std::string;
 
+template <class Type>
 class Node {
 private:
-    int value;
+    Type info;
 
-    Node *next;
+    Node<Type> *next;
 
-    Node *prev;
+    Node<Type> *prev;
 
-    friend class DList;
+    template<Type> friend class DList;
 
 public:
-    explicit Node(int _value, Node *_prev, Node *_next);
+    explicit Node(Type _info, Node<Type> *_prev, Node<Type> *_next);
 
     ~Node();
 
@@ -23,27 +24,28 @@ public:
 
     Node *get_prev();
 
-    int get_value();
+    Type get_info();
 };
 
+template <class Type>
 class DList {
 private:
-    Node *node = nullptr;
+    Node<Type> *node = nullptr;
 
 public:
     ~DList();
 
-    Node *get_node();
+    Node<Type> *get_node();
 
     bool is_empty();
 
-    void add_to_head(int value);
+    void add_to_head(Type info);
 
-    void add_to_tail(int value);
+    void add_to_tail(Type info);
 
-    void add_after(Node *&after, int value);
+    void add_after(Node<Type> *&after, Type info);
 
-    void remove(Node *&del_el);
+    void remove(Node<Type> *&del_el);
 
     void print();
 };
