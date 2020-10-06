@@ -3,22 +3,45 @@
 #include "libraries/DList.h"
 
 using std::cout;
+using std::ostream;
+
+class SNode {
+public:
+    int value;
+
+    friend std::ostream& operator<< (std::ostream& stream, const SNode& matrix) {
+        stream << matrix.value;
+        return stream;
+    }
+};
+
+
 
 int main() {
-    auto list = new DList;
+    auto *list = new DList<SNode>;
 
-    list->add_to_head(1);
-    list->add_to_head(2);
-    list->add_to_head(3);
+    SNode node{};
+    node.value = 1;
+
+
+    list->add_to_head(node);
+    node.value = 2;
+    list->add_to_head(node);
+    node.value = 3;
+    list->add_to_head(node);
     list->print();
 
-    list->add_to_tail(4);
-    list->add_to_tail(5);
-    list->add_to_tail(6);
+    node.value = 4;
+    list->add_to_tail(node);
+    node.value = 5;
+    list->add_to_tail(node);
+    node.value = 6;
+    list->add_to_tail(node);
     list->print();
 
-    Node *n = list->get_node()->get_next()->get_next();
-    list->remove(n);
+    Node<SNode> *n = list->get_node()->get_next()->get_next();
+    node.value = 7;
+    list->add_after(n, node);
     list->print();
 
     delete list;
